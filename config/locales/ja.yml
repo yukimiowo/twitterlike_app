@@ -4,9 +4,9 @@ ja:
     attributes:
       user:
         name: 名前
-        email: Eメール
-        password: パスワード
         password_confirmation: パスワード(確認用)
+        email: Eメール
+        password: パスワード 
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"

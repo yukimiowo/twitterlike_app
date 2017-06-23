@@ -10,6 +10,10 @@ module SessionsHelper
     cookies.permanent[:remember_token] = user.remember_token
   end
   
+  def current_user?(user)
+    user == current_user
+  end
+  
   def current_user
     if (user_id = session[:user_id])
       @current_user ||= User.find_by(id: session[:user_id])
@@ -41,5 +45,16 @@ module SessionsHelper
   def destroy
     log_out if logged_in?
     redirect_to root_url
+  end
+  
+  #記録したURL(もしくはデフォルト)にリダイレクトする
+  def redirect_back_or(default)
+    redirect_to(session[:forwading_url] || default)
+    session.delete(:forwading_url)
+  end
+  
+  #アクセスしようとしたURLの保存
+  def store_location
+    session[:forwading_url] = request.original_url if request.get?
   end
 end
