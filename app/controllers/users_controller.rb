@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user,  only: :destroy
+  before_action :find_user, only: [:show, :destroy]
   
   def index
     @users = User.paginate(page: params[:page])
@@ -12,7 +13,6 @@ class UsersController < ApplicationController
   end
   
   def show
-    @user = User.find(params[:id])
     @microposts = @user.microposts.paginate(page: params[:page])
   end
   
@@ -23,6 +23,7 @@ class UsersController < ApplicationController
       flash[:success] = "ようこそ"
       redirect_to @user
     else
+      flash.now[:error] = "作成に失敗しました"
       render 'new'
     end
   end
@@ -35,14 +36,20 @@ class UsersController < ApplicationController
       flash[:success] = "プロフールを更新しました"
       redirect_to @user
     else
+      flash.now[:danger] = "更新に失敗しました"
       render 'edit'
     end
   end
   
   def destroy
-    User.find(params[:id]).destroy
-    flash[:success] = "ユーザを削除しました"
-    redirect_to users_url
+    if @user.destroy
+      flash[:success] = "ユーザを削除しました"
+      redirect_to users_url
+    else
+      #失敗時のアクション
+      flash.now[:danger] = "削除に失敗しました"
+      render 'index'
+    end
   end
   
   private
@@ -57,5 +64,9 @@ class UsersController < ApplicationController
     
     def admin_user
       redirect_to(root_url) unless current_user.admin?
+    end
+    
+    def find_user
+      @user = User.find(params[:id])
     end
 end
