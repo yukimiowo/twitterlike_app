@@ -9,7 +9,7 @@ class Micropost < ApplicationRecord
   private
   
     def picture_size
-      if picture_size > 5.megabytes
+      if picture.size > 5.megabytes
         errors.add(:picture, "5MBより小さくしてください")
       end
     end

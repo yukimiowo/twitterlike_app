@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy]
+  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
   before_action :correct_user, only: [:edit, :update]
   before_action :admin_user,  only: :destroy
-  before_action :find_user, only: [:show, :destroy]
+  before_action :find_user, only: [:show, :destroy, :following, :followers]
   
   def index
     @users = User.paginate(page: params[:page])
@@ -50,6 +50,18 @@ class UsersController < ApplicationController
       flash.now[:danger] = "削除に失敗しました"
       render 'index'
     end
+  end
+  
+  def following
+    @title = "Following"
+    @users = @user.following.paginate(page: params[:page])
+    render 'show_follow'
+  end
+  
+  def followers
+    @title = "Followers"
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
   
   private
