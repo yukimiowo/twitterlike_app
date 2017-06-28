@@ -10,13 +10,13 @@
         = render 'shared/micropost_form'
     .col-md-8
       h3
-        Micropost Feed
+        | Micropost Feed
       = render 'shared/feed'
 -else
-.center jumbotron
-  h1
-    Twitter Like App
-  h2
-    This is twitter like application.
-  
-  = link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary"
+  .center.jumbotron
+    h1
+      | Twitter Like App
+    h2
+      | This is twitter like application.
+    
+    = link_to "Sign up now!", signup_path, class: "btn btn-lg btn-primary"

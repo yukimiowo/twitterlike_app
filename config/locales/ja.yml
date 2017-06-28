@@ -7,6 +7,8 @@ ja:
         password_confirmation: パスワード(確認用)
         email: Eメール
         password: パスワード 
+      response:
+        content: 返信内容
     errors:
       messages:
         record_invalid: "バリデーションに失敗しました: %{errors}"

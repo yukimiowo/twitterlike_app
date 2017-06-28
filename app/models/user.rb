@@ -44,9 +44,8 @@ class User < ApplicationRecord
   end
   
   def feed
-    #フォローしてる人でもreply_toがnilじゃなかったら省く、reply_toが自分と一致していたら表示する
-    following_ids = "SELECT followed_id FROM relationships WHERE (follower_id = :user_id)"
-    Micropost.where("(user_id IN (#{following_ids}) AND reply_to IS NULL) OR user_id = :user_id OR reply_to = :user_id", user_id: id)
+    following_ids = "SELECT followed_id FROM relationships WHERE follower_id = :user_id"
+    Micropost.where("user_id IN (#{following_ids}) OR user_id = :user_id", user_id: id)
   end
   
   def follow(other_user)

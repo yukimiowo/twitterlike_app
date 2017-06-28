@@ -10,6 +10,14 @@
     <% if current_user?(micropost.user) %>
       <%= link_to "delete", micropost, method: :delete,
                                        data: { confirm: "You sure?" } %>
+    <% else %>
+      <%= link_to "reply", new_micropost_response_path(micropost_id: micropost.id) %>
     <% end %>
   </span>
+  <% if micropost.responses.any? %>
+    <% @responses = micropost.responses %>
+    <ol class="responses">
+        <%= render @responses %>
+    </ol>
+  <% end %>
 </li>
