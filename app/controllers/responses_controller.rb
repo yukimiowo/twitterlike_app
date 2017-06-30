@@ -30,7 +30,7 @@ class ResponsesController < ApplicationController
   private
   
     def response_params
-      params[:response].permit(:content, :comment_user_id)
+      params.require(:response).permit(:content, :comment_user_id)
     end
     
     def set_micropost

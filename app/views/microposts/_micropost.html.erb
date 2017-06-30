@@ -15,9 +15,10 @@
     <% end %>
   </span>
   <% if micropost.responses.any? %>
-    <% @responses = micropost.responses %>
     <ol class="responses">
-        <%= render @responses %>
+    <% micropost.responses.each do |response|%>
+        <%= render response %>
+    <% end %>
     </ol>
   <% end %>
 </li>
