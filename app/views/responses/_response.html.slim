@@ -1,0 +1,13 @@
+-responses.each do |response|
+  li
+    = link_to gravatar_for(response.user, size: 50), response.user
+    span.user
+      = link_to response.user.name, response.user
+    span.content
+      = response.content
+    span.timestamp
+      = "#{time_ago_in_words(response.created_at)}前に投稿"
+      -if current_user?(response.user)
+        = link_to "delete", micropost_response_path(micropost_id: response.micropost_id, id: response.id), method: :delete, data: { confirm: "You sure?" }, class: "delrep"
+      -else
+        = link_to "reply", new_micropost_response_path(micropost_id: response.micropost.id), class: "delrep"

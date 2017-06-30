@@ -9,7 +9,7 @@ aside.col-md-4
   = form_for @response, url: { action: :create } do |f|
     = render 'shared/error_messages', object: f.object
     .field
-      = f.hidden_field :comment_user_id, :value => current_user.id
+      = f.hidden_field :user_id, :value => current_user.id
       = f.label :content
       = f.text_area :content, class: 'form-control', placeholder: "Compose response..."
       

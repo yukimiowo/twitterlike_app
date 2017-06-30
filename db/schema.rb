@@ -34,11 +34,12 @@ ActiveRecord::Schema.define(version: 20170628080601) do
 
   create_table "responses", force: :cascade do |t|
     t.text     "content"
-    t.integer  "comment_user_id"
     t.integer  "micropost_id"
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
+    t.integer  "user_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
     t.index ["micropost_id"], name: "index_responses_on_micropost_id"
+    t.index ["user_id"], name: "index_responses_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
