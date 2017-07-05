@@ -1,8 +1,8 @@
 class UsersController < ApplicationController
-  before_action :logged_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
-  before_action :correct_user, only: [:edit, :update]
-  before_action :admin_user,  only: :destroy
-  before_action :find_user, only: [:show, :destroy, :following, :followers]
+  before_action :ensure_logged_in, only: [:index, :edit, :update, :destroy, :followings, :followers]
+  before_action :ensure_current_user, only: [:edit, :update]
+  before_action :ensure_admin_user,  only: :destroy
+  before_action :find_user, only: [:show, :destroy, :followings, :followers]
   
   def index
     @users = User.paginate(page: params[:page])
@@ -13,7 +13,7 @@ class UsersController < ApplicationController
   end
   
   def show
-    @microposts = @user.microposts.paginate(page: params[:page])
+    @microposts = @user.microposts.order(created_at: :DESC).paginate(page: params[:page])
   end
   
   def create
@@ -23,8 +23,8 @@ class UsersController < ApplicationController
       flash[:success] = "ようこそ"
       redirect_to @user
     else
-      flash.now[:error] = "作成に失敗しました"
-      render 'new'
+      flash.now[:danger] = "作成に失敗しました"
+      render :new
     end
   end
   
@@ -37,31 +37,30 @@ class UsersController < ApplicationController
       redirect_to @user
     else
       flash.now[:danger] = "更新に失敗しました"
-      render 'edit'
+      render :edit
     end
   end
   
   def destroy
     if @user.destroy
       flash[:success] = "ユーザを削除しました"
-      redirect_to users_url
     else
       #失敗時のアクション
-      flash.now[:danger] = "削除に失敗しました"
-      render 'index'
+      flash[:danger] = "削除に失敗しました"
     end
+    redirect_to users_url
   end
   
-  def following
-    @title = "Following"
-    @users = @user.following.paginate(page: params[:page])
-    render 'show_follow'
+  def followings
+    @title = "Followings"
+    @users = @user.followings.paginate(page: params[:page])
+    render :show_follow
   end
   
   def followers
     @title = "Followers"
     @users = @user.followers.paginate(page: params[:page])
-    render 'show_follow'
+    render :show_follow
   end
   
   private
@@ -69,12 +68,12 @@ class UsersController < ApplicationController
       params.require(:user).permit(:name, :email, :password, :password_confirmation)
     end
     
-    def correct_user
+    def ensure_current_user
       @user = User.find(params[:id])
       redirect_to(root_url) unless current_user?(@user)
     end
     
-    def admin_user
+    def ensure_admin_user
       redirect_to(root_url) unless current_user.admin?
     end
     

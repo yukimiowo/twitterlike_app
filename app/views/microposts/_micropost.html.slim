@@ -8,7 +8,7 @@ li id="micropost-#{micropost.id}"
   span.timestamp
     = "#{time_ago_in_words(micropost.created_at)}前に投稿"
     -if current_user?(micropost.user) 
-      = link_to "delete", micropost, method: :delete, data: { confirm: "You sure?" }, class: "delrep"
+      = link_to "delete", micropost, method: :delete, data: { confirm: "本当ですか？" }, class: "delrep"
     -else
       = link_to "reply", new_micropost_response_path(micropost_id: micropost.id), class: "delrep"
     -if micropost.responses.any?

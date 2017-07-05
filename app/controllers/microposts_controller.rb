@@ -1,5 +1,5 @@
 class MicropostsController < ApplicationController
-  before_action :logged_in_user, only: [:create, :destroy]
+  before_action :ensure_logged_in, only: [:create, :destroy]
   before_action :correct_micropost, only: :destroy
   
   def create
@@ -8,7 +8,8 @@ class MicropostsController < ApplicationController
       flash[:success] = "マイクロポストが作成されました"
       redirect_to root_url
     else
-      @feed_items = []
+      flash.now[:danger] = "マイクロポストが作成できませんでした"
+      @feed_items = current_user.feed.order(created_at: :DESC).paginate(page: params[:page])
       render 'static_pages/home'
     end
   end
